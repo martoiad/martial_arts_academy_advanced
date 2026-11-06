@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.1/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -34,6 +35,7 @@ PROJECT_APPS = [
     'martial_arts',
     'curriculum',
     'events',
+    'accounts',
 ]
 
 INSTALLED_APPS = [
@@ -44,6 +46,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ] + PROJECT_APPS
+
+AUTH_USER_MODEL = 'accounts.CustomUser'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -81,8 +85,12 @@ WSGI_APPLICATION = 'martial_arts_academy.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'martial_arts_academy_advanced',
+        'USER': 'postgres',
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
