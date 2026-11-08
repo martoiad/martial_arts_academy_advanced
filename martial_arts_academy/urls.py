@@ -8,4 +8,5 @@ urlpatterns = [
     path('martial-arts/', include('martial_arts.urls')),
     path('events/', include('events.urls')),
     path('curriculum/', include('curriculum.urls')),
+    path('accounts/', include('accounts.urls')),
 ]
