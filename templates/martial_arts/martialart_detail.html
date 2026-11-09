@@ -11,16 +11,19 @@
     <h2>{{ object.name }}</h2>
 
     {% with image_path=object.name|martial_art_image %}
-    <img
-        src="{% static image_path %}"
-        alt="{{ object.name }}"
-        width="500"
-    >
-{% endwith %}
+        <img
+                src="{% static image_path %}"
+                alt="{{ object.name }}"
+                width="500"
+        >
+    {% endwith %}
 
     <p>{{ object.description }}</p>
 
-    <a href="{% url 'martial-art-edit' object.pk %}">Edit</a>
-    <a href="{% url 'martial-art-delete' object.pk %}">Delete</a>
+    {% if user.is_authenticated %}
+        <a href="{% url 'martial-art-edit' object.pk %}">Edit</a>
+        <a href="{% url 'martial-art-delete' object.pk %}">Delete</a>
+    {% endif %}
+
     <a href="{% url 'martial-art-list' %}">Back to Martial Arts</a>
 {% endblock %}

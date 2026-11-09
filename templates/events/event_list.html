@@ -7,15 +7,17 @@
 {% block content %}
     <h2>Events</h2>
 
-    <a href="{% url 'event-create' %}">Add Event</a>
+    {% if user.is_authenticated %}
+        <a href="{% url 'event-create' %}">Add Event</a>
+    {% endif %}
 
-<p>
-    Filter:
-    <a href="{% url 'event-list' %}">All</a>
-    <a href="{% url 'event-list' %}?type=Seminar">Seminars</a>
-    <a href="{% url 'event-list' %}?type=Competition">Competitions</a>
-    <a href="{% url 'event-list' %}?type=Gala">Galas</a>
-</p>
+    <p>
+        Filter:
+        <a href="{% url 'event-list' %}">All</a>
+        <a href="{% url 'event-list' %}?type=Seminar">Seminars</a>
+        <a href="{% url 'event-list' %}?type=Competition">Competitions</a>
+        <a href="{% url 'event-list' %}?type=Gala">Galas</a>
+    </p>
 
     {% for event in object_list %}
         <article>
