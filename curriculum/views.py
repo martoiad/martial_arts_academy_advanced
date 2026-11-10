@@ -1,4 +1,4 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import (
     ListView,
@@ -19,7 +19,8 @@ class CurriculumItemDetailView(DetailView):
     model = CurriculumItem
 
 
-class CurriculumItemCreateView(LoginRequiredMixin, CreateView):
+class CurriculumItemCreateView(PermissionRequiredMixin, CreateView):
     model = CurriculumItem
     form_class = CurriculumItemCreateForm
     success_url = reverse_lazy('curriculum-list')
+    permission_required = 'curriculum.add_curriculumitem'

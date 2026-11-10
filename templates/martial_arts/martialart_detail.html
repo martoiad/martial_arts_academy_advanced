@@ -20,8 +20,11 @@
 
     <p>{{ object.description }}</p>
 
-    {% if user.is_authenticated %}
+    {% if perms.martial_arts.change_martialart %}
         <a href="{% url 'martial-art-edit' object.pk %}">Edit</a>
+    {% endif %}
+
+    {% if perms.martial_arts.delete_martialart %}
         <a href="{% url 'martial-art-delete' object.pk %}">Delete</a>
     {% endif %}
 

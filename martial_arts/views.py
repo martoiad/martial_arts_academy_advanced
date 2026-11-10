@@ -1,4 +1,4 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import (
     ListView,
@@ -20,18 +20,21 @@ class MartialArtDetailView(DetailView):
     model = MartialArt
 
 
-class MartialArtCreateView(LoginRequiredMixin, CreateView):
+class MartialArtCreateView(PermissionRequiredMixin, CreateView):
     model = MartialArt
     form_class = MartialArtCreateForm
     success_url = reverse_lazy('martial-art-list')
+    permission_required = 'martial_arts.add_martialart'
 
 
-class MartialArtUpdateView(LoginRequiredMixin, UpdateView):
+class MartialArtUpdateView(PermissionRequiredMixin, UpdateView):
     model = MartialArt
     form_class = MartialArtEditForm
     success_url = reverse_lazy('martial-art-list')
+    permission_required = 'martial_arts.change_martialart'
 
 
-class MartialArtDeleteView(LoginRequiredMixin, DeleteView):
+class MartialArtDeleteView(PermissionRequiredMixin, DeleteView):
     model = MartialArt
     success_url = reverse_lazy('martial-art-list')
+    permission_required = 'martial_arts.delete_martialart'

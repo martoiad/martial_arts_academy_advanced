@@ -26,8 +26,11 @@
         {% endfor %}
     </ul>
 
-    {% if user.is_authenticated %}
+    {% if perms.events.change_event %}
         <a href="{% url 'event-edit' object.pk %}">Edit</a>
+    {% endif %}
+
+    {% if perms.events.delete_event %}
         <a href="{% url 'event-delete' object.pk %}">Delete</a>
     {% endif %}
 

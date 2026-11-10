@@ -10,7 +10,7 @@
 {% block content %}
     <h2>Martial Arts</h2>
 
-    {% if user.is_authenticated %}
+    {% if perms.martial_arts.add_martialart %}
         <a href="{% url 'martial-art-create' %}">Add Martial Art</a>
     {% endif %}
 

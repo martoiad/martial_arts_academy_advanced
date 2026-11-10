@@ -7,7 +7,7 @@
 {% block content %}
     <h2>Curriculum</h2>
 
-    {% if user.is_authenticated %}
+    {% if perms.curriculum.add_curriculumitem %}
         <a href="{% url 'curriculum-create' %}">Add Curriculum Item</a>
     {% endif %}
 

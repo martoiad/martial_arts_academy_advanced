@@ -7,7 +7,7 @@
 {% block content %}
     <h2>Events</h2>
 
-    {% if user.is_authenticated %}
+    {% if perms.events.add_event %}
         <a href="{% url 'event-create' %}">Add Event</a>
     {% endif %}
 

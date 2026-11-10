@@ -1,4 +1,4 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import (
     ListView,
@@ -30,18 +30,21 @@ class EventDetailView(DetailView):
     model = Event
 
 
-class EventCreateView(LoginRequiredMixin, CreateView):
+class EventCreateView(PermissionRequiredMixin, CreateView):
     model = Event
     form_class = EventCreateForm
     success_url = reverse_lazy('event-list')
+    permission_required = 'events.add_event'
 
 
-class EventUpdateView(LoginRequiredMixin, UpdateView):
+class EventUpdateView(PermissionRequiredMixin, UpdateView):
     model = Event
     form_class = EventEditForm
     success_url = reverse_lazy('event-list')
+    permission_required = 'events.change_event'
 
 
-class EventDeleteView(LoginRequiredMixin, DeleteView):
+class EventDeleteView(PermissionRequiredMixin, DeleteView):
     model = Event
     success_url = reverse_lazy('event-list')
+    permission_required = 'events.delete_event'
