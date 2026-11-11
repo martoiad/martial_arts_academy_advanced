@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {{ object.title }} | Martial Arts Academy
+{% endblock %}
+
+{% block content %}
+    <h2>{{ object.title }}</h2>
+
+    <p>Martial Art: {{ object.martial_art.name }}</p>
+    <p>Instructor: {{ object.instructor.username }}</p>
+    <p>Date: {{ object.date }}</p>
+    <p>Time: {{ object.start_time }} - {{ object.end_time }}</p>
+    <p>Capacity: {{ object.capacity }}</p>
+
+    {% if object.description %}
+        <p>{{ object.description }}</p>
+    {% endif %}
+
+    <a href="{% url 'training-list' %}">Back to Training Schedule</a>
+{% endblock %}

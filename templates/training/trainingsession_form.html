@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Training Session Form | Martial Arts Academy
+{% endblock %}
+
+{% block content %}
+    <h2>Training Session Form</h2>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <button type="submit">Save</button>
+    </form>
+
+    <a href="{% url 'training-list' %}">Back to Training Schedule</a>
+{% endblock %}

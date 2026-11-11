@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Training | Martial Arts Academy
+{% endblock %}
+
+{% block content %}
+    <h2>Training Schedule</h2>
+
+    {% if perms.training.add_trainingsession %}
+        <a href="{% url 'training-create' %}">Add Training Session</a>
+    {% endif %}
+
+    {% for session in object_list %}
+        <article>
+            <h3>
+                <a href="{% url 'training-detail' session.pk %}">
+                    {{ session.title }}
+                </a>
+            </h3>
+
+            <p>Martial Art: {{ session.martial_art.name }}</p>
+            <p>Instructor: {{ session.instructor.username }}</p>
+            <p>Date: {{ session.date }}</p>
+            <p>Time: {{ session.start_time }} - {{ session.end_time }}</p>
+            <p>Capacity: {{ session.capacity }}</p>
+        </article>
+    {% empty %}
+        <p>No training sessions have been scheduled yet.</p>
+    {% endfor %}
+{% endblock %}

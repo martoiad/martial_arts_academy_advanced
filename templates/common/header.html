@@ -6,6 +6,7 @@
         <a href="{% url 'martial-art-list' %}">Martial Arts</a>
         <a href="{% url 'curriculum-list' %}">Curriculum</a>
         <a href="{% url 'event-list' %}">Events</a>
+        <a href="{% url 'training-list' %}">Training</a>
 
         {% if user.is_authenticated %}
             <a href="{% url 'member-dashboard' %}">Member Area</a>
