@@ -19,6 +19,11 @@ class TrainingSession(models.Model):
         on_delete=models.CASCADE,
         related_name='instructed_sessions',
     )
+    attendees = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        blank=True,
+        related_name='attended_training_sessions',
+    )
     date = models.DateField()
     start_time = models.TimeField()
     end_time = models.TimeField()
@@ -27,3 +32,11 @@ class TrainingSession(models.Model):
 
     def __str__(self):
         return self.title
+
+    @property
+    def places_left(self):
+        return self.capacity - self.attendees.count()
+
+    @property
+    def is_full(self):
+        return self.attendees.count() >= self.capacity

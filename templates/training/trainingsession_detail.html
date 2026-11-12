@@ -12,9 +12,35 @@
     <p>Date: {{ object.date }}</p>
     <p>Time: {{ object.start_time }} - {{ object.end_time }}</p>
     <p>Capacity: {{ object.capacity }}</p>
+    <p>Attending: {{ object.attendees.count }} / {{ object.capacity }}</p>
+    <p>Places left: {{ object.places_left }}</p>
 
     {% if object.description %}
         <p>{{ object.description }}</p>
+    {% endif %}
+
+    {% if is_student %}
+        {% if user in object.attendees.all %}
+            <form method="post" action="{% url 'training-leave' object.pk %}">
+                {% csrf_token %}
+                <button type="submit">Leave Session</button>
+            </form>
+        {% elif object.is_full %}
+            <p>Session Full</p>
+        {% else %}
+            <form method="post" action="{% url 'training-join' object.pk %}">
+                {% csrf_token %}
+                <button type="submit">Join Session</button>
+            </form>
+        {% endif %}
+    {% endif %}
+
+    {% if perms.training.change_trainingsession %}
+        <a href="{% url 'training-edit' object.pk %}">Edit</a>
+    {% endif %}
+
+    {% if perms.training.delete_trainingsession %}
+        <a href="{% url 'training-delete' object.pk %}">Delete</a>
     {% endif %}
 
     <a href="{% url 'training-list' %}">Back to Training Schedule</a>

@@ -9,5 +9,21 @@
 
     <p>Welcome, {{ user.username }}.</p>
 
-    <p>Your academy features will appear here.</p>
+    <h3>My Training Sessions</h3>
+
+    {% for session in joined_sessions %}
+        <article>
+            <h4>
+                <a href="{% url 'training-detail' session.pk %}">
+                    {{ session.title }}
+                </a>
+            </h4>
+
+            <p>Martial Art: {{ session.martial_art.name }}</p>
+            <p>Date: {{ session.date }}</p>
+            <p>Time: {{ session.start_time }} - {{ session.end_time }}</p>
+        </article>
+    {% empty %}
+        <p>You have not joined any training sessions yet.</p>
+    {% endfor %}
 {% endblock %}
