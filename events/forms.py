@@ -54,6 +54,8 @@ class EventBaseForm(forms.ModelForm):
             'martial_arts': forms.CheckboxSelectMultiple(),
         }
 
+
+class EventCreateForm(EventBaseForm):
     def clean_date(self):
         event_date = self.cleaned_data.get('date')
 
@@ -63,10 +65,6 @@ class EventBaseForm(forms.ModelForm):
             )
 
         return event_date
-
-
-class EventCreateForm(EventBaseForm):
-    ...
 
 
 class EventEditForm(EventBaseForm):

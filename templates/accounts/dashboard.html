@@ -9,21 +9,43 @@
 
     <p>Welcome, {{ user.username }}.</p>
 
-    <h3>My Training Sessions</h3>
+    {% if is_instructor %}
+        <h3>My Teaching Sessions</h3>
 
-    {% for session in joined_sessions %}
-        <article>
-            <h4>
-                <a href="{% url 'training-detail' session.pk %}">
-                    {{ session.title }}
-                </a>
-            </h4>
+        {% for session in teaching_sessions %}
+            <article>
+                <h4>
+                    <a href="{% url 'training-detail' session.pk %}">
+                        {{ session.title }}
+                    </a>
+                </h4>
 
-            <p>Martial Art: {{ session.martial_art.name }}</p>
-            <p>Date: {{ session.date }}</p>
-            <p>Time: {{ session.start_time }} - {{ session.end_time }}</p>
-        </article>
-    {% empty %}
-        <p>You have not joined any training sessions yet.</p>
-    {% endfor %}
+                <p>Martial Art: {{ session.martial_art.name }}</p>
+                <p>Date: {{ session.date }}</p>
+                <p>Time: {{ session.start_time }} - {{ session.end_time }}</p>
+                <p>Attending: {{ session.attendees.count }} / {{ session.capacity }}</p>
+            </article>
+        {% empty %}
+            <p>You are not assigned to any training sessions yet.</p>
+        {% endfor %}
+
+    {% else %}
+        <h3>My Training Sessions</h3>
+
+        {% for session in joined_sessions %}
+            <article>
+                <h4>
+                    <a href="{% url 'training-detail' session.pk %}">
+                        {{ session.title }}
+                    </a>
+                </h4>
+
+                <p>Martial Art: {{ session.martial_art.name }}</p>
+                <p>Date: {{ session.date }}</p>
+                <p>Time: {{ session.start_time }} - {{ session.end_time }}</p>
+            </article>
+        {% empty %}
+            <p>You have not joined any training sessions yet.</p>
+        {% endfor %}
+    {% endif %}
 {% endblock %}

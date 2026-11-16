@@ -23,4 +23,14 @@ class MemberDashboardView(LoginRequiredMixin, TemplateView):
             .order_by('date', 'start_time')
         )
 
+        context['is_instructor'] = (
+            self.request.user.groups.filter(name='Instructors').exists()
+        )
+
+        context['teaching_sessions'] = (
+            self.request.user.instructed_sessions
+            .all()
+            .order_by('date', 'start_time')
+        )
+
         return context
