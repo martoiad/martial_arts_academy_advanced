@@ -1,3 +1,11 @@
+from rest_framework.generics import (
+    ListCreateAPIView,
+    RetrieveUpdateDestroyAPIView,
+)
+
+from training.permissions import IsInstructorOrReadOnly
+from training.serializers import TrainingSessionSerializer
+
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import (
@@ -81,3 +89,18 @@ class TrainingSessionLeaveView(LoginRequiredMixin, View):
         training_session.attendees.remove(request.user)
 
         return redirect('training-detail', pk=pk)
+
+
+class TrainingSessionListCreateAPIView(ListCreateAPIView):
+    queryset = TrainingSession.objects.all().order_by('date', 'start_time')
+    serializer_class = TrainingSessionSerializer
+    permission_classes = [IsInstructorOrReadOnly]
+
+    def perform_create(self, serializer):
+        serializer.save(instructor=self.request.user)
+
+
+class TrainingSessionDetailAPIView(RetrieveUpdateDestroyAPIView):
+    queryset = TrainingSession.objects.all()
+    serializer_class = TrainingSessionSerializer
+    permission_classes = [IsInstructorOrReadOnly]
