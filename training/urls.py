@@ -8,6 +8,7 @@ from training.views import (
     TrainingSessionLeaveView,
     TrainingSessionListView,
     TrainingSessionUpdateView,
+    TrainingSessionReportView,
 )
 
 urlpatterns = [
@@ -18,4 +19,5 @@ urlpatterns = [
     path('<int:pk>/delete/', TrainingSessionDeleteView.as_view(), name='training-delete'),
     path('<int:pk>/join/', TrainingSessionJoinView.as_view(), name='training-join'),
     path('<int:pk>/leave/', TrainingSessionLeaveView.as_view(), name='training-leave'),
+    path('<int:pk>/report/', TrainingSessionReportView.as_view(), name='training-report'),
 ]

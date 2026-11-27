@@ -17,6 +17,12 @@
 {% include 'common/header.html' %}
 
 <main>
+    {% if messages %}
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+
     {% block content %}
     {% endblock %}
 </main>

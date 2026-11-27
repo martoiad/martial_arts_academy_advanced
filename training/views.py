@@ -23,6 +23,12 @@ from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404, redirect
 from django.views import View
 
+from training.tasks import generate_attendance_report
+from celery import current_app
+
+from django.contrib import messages
+from django.conf import settings
+
 
 class TrainingSessionListView(ListView):
     model = TrainingSession
@@ -39,6 +45,31 @@ class TrainingSessionDetailView(DetailView):
                 self.request.user.is_authenticated
                 and self.request.user.groups.filter(name='Students').exists()
         )
+
+        context['can_generate_report'] = (
+                self.request.user.is_authenticated
+                and self.request.user.groups.filter(name='Instructors').exists()
+                and self.object.instructor == self.request.user
+        )
+
+        if context['can_generate_report']:
+            task_id = self.request.session.get(
+                f'attendance_report_{self.request.user.pk}_{self.object.pk}'
+            )
+
+            if not settings.CELERY_RESULT_BACKEND:
+                context['report_status'] = 'UNAVAILABLE'
+
+            elif task_id:
+                try:
+                    task = current_app.AsyncResult(task_id)
+                    context['report_status'] = task.status
+
+                    if context['report_status'] == 'SUCCESS':
+                        context['attendance_report'] = task.result
+
+                except Exception:
+                    context['report_status'] = 'UNAVAILABLE'
 
         return context
 
@@ -104,3 +135,35 @@ class TrainingSessionDetailAPIView(RetrieveUpdateDestroyAPIView):
     queryset = TrainingSession.objects.all()
     serializer_class = TrainingSessionSerializer
     permission_classes = [IsInstructorOrReadOnly]
+
+
+class TrainingSessionReportView(LoginRequiredMixin, View):
+    def post(self, request, pk):
+        if not request.user.groups.filter(name='Instructors').exists():
+            raise PermissionDenied
+
+        training_session = get_object_or_404(TrainingSession, pk=pk)
+
+        if training_session.instructor != request.user:
+            raise PermissionDenied
+
+        if not settings.CELERY_BROKER_URL:
+            messages.error(
+                request,
+                'Attendance report service is unavailable.'
+            )
+            return redirect('training-detail', pk=pk)
+
+        try:
+            task = generate_attendance_report.delay(training_session.pk)
+
+        except Exception:
+            messages.error(
+                request,
+                'Unable to generate attendance report. Please try again later.'
+            )
+            return redirect('training-detail', pk=pk)
+
+        request.session[f'attendance_report_{request.user.pk}_{pk}'] = task.id
+
+        return redirect('training-detail', pk=pk)

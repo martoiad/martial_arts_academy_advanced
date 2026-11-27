@@ -43,5 +43,27 @@
         <a href="{% url 'training-delete' object.pk %}">Delete</a>
     {% endif %}
 
+    {% if can_generate_report %}
+        <h3>Attendance Report</h3>
+
+        <form method="post" action="{% url 'training-report' object.pk %}">
+            {% csrf_token %}
+            <button type="submit">Generate Attendance Report</button>
+        </form>
+
+        {% if report_status == 'SUCCESS' %}
+            <p>Session: {{ attendance_report.title }}</p>
+            <p>Capacity: {{ attendance_report.capacity }}</p>
+            <p>Registered students: {{ attendance_report.registered_students }}</p>
+            <p>Places left: {{ attendance_report.places_left }}</p>
+        {% elif report_status == 'UNAVAILABLE' %}
+            <p>Attendance report service is temporarily unavailable.</p>
+        {% elif report_status == 'FAILURE' %}
+            <p>Report generation failed. Please try again.</p>
+        {% elif report_status %}
+            <p>Report is being processed or is not yet available.</p>
+            <a href="{% url 'training-detail' object.pk %}">Refresh Report</a>
+        {% endif %}
+    {% endif %}
     <a href="{% url 'training-list' %}">Back to Training Schedule</a>
 {% endblock %}
